@@ -58,6 +58,7 @@ void LinkedList<T>::PushFront(T content) {
 	newNode->content = content;
 	newNode->next = head->next;
 	head->next = newNode;
+	tail->next = newNode;
 
 	if(IsEmpty())
 		tail->next = newNode;
