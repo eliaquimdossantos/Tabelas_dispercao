@@ -189,8 +189,8 @@ void LinkedList<T>::PrintRepeats(){
 	bool printed = false;
 
 	while(aux != nullptr) {				
-		if(aux->cont_repeat > 0){
-			std::cout << ">'" << aux->content << "' repete " << aux->cont_repeat << "x" << std::endl;
+		if(aux->cont_repeat > 1){
+			std::cout << "> '" << aux->content << "' repete " << aux->cont_repeat << "x" << std::endl;
 			printed = true;
 		}
 		aux = aux->next;
