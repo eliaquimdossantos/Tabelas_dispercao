@@ -1,15 +1,15 @@
 #include "lista.h"
 #include <random>
 #include <ctime>
+#include <fstream>
 
 using namespace std;
 
 int sum(string expressao){
 	int x = 0;
-
-	for(int i = 0; i < expressao.size(); i++){
-		cout << expressao[i] << "  " ;
-		x += expressao[i];
+	
+	for(int i = 0; i < expressao.size(); i++){		
+		x += expressao[i];					
 	}
 
 	x = x % 53;
@@ -19,65 +19,57 @@ int sum(string expressao){
 
 
 int main(int argc, char const *argv[])
-{
-	LinkedList<string> vetor[53];
-
-	string texto = "Eai Eai Pois E Pois E ";
+{	
+	LinkedList<string> array[53];	
 	LinkedList<string> sub_str;
-	string bloco = "";
-	int total_colisao = 0;
-
-
-	for(int i = 0; i < texto.size(); i++){
-		if(texto[i] != ' '){
-			bloco += texto[i];			
-		}else{
-			if(bloco != "")
-				sub_str.PushBack(bloco);
-
-			bloco = "";
-		}
-	}
-
-	sub_str.Print();
-
-	sum(texto);
-
-	LinkedList<string>percorre_list = sub_str;
+	string word = "";
+	int word_indexs = 0;
 	int index = 0;
 
-/*
-	for(int i = 0; i < sub_str.Length(); i++){				
-		index = sum(percorre_list.GetElement(i));		
-		vetor[i].PushBack("start_list");		
+	while(cin >> word){			
+		word_indexs = word.size()-1;
+
+		for(int i = 0; i <= word_indexs; i++){			
+			word[i] = tolower(word[i]);				
+		}
+		
+		if(word_indexs > 0){
+			if((word[0] >= 48 && word[0] <= 57)
+					|| (word[0] >= 97 && word[0] <= 122)){		
+				
+			}else{
+				for(int i = 0; i < word_indexs-1; i++){
+					word[i] = word[i+1];
+				}
+					
+				word[word_indexs-1] = '\0';																
+			} 
+
+			if((word[word_indexs] >= 48 && word[word_indexs] <= 57)
+					|| (word[word_indexs] >= 97 && word[word_indexs] <= 122)
+					|| (word_indexs == '%')){		
+				
+			}else{		
+				word[word_indexs] = '\0';	
+			}
+		}		
+
+		index = sum(word);
+		
+		array[index].PushBack(word);
 	}
-*/	
 
-	for(int i = 0; i < texto.size()-1; i++){
 
-	}
-	/*for(int i = 0; i < 15; i++){
-		index = sum(numeroGerado);		
-			
-		if(vetor[i].Length() > 1){
-			cout << "Houve colisão" << endl;
-			vetor[index].PushBack(string);	
-			total_colisao++;
-		}else
-			vetor[index].PushBack(string);	
-			
+	for(long i = 0 ; i < 53; i++){		
+		cout << "[" << i+1 << "] ";
+		array[i].Print();
 	}
 
-	*/
+	cout << endl << endl;
 
-
-
-	for(int i = 0 ; i < 20; i++){
-		cout << ">";
-		vetor[i].Print();
+	for(long i = 0 ; i < 53; i++){		
+		array[i].PrintRepeats();
 	}
-
-	cout << endl << "++Total de colisões: " << total_colisao << endl;
 
 	return 0;
 }

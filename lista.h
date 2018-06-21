@@ -7,6 +7,7 @@ template <typename T>
 struct node {
 	T content;
 	struct node * next;
+	int cont_repeat = 0;
 };
 
 // List with head
@@ -15,6 +16,7 @@ class LinkedList {
 	struct node<T> * head;
 	struct node<T> * tail;
 	int length;
+	int VerifyRepeat(T content);
 
 public:
 	LinkedList();
@@ -29,6 +31,7 @@ public:
 	int  Length();
 	bool IsEmpty();
 	void Print();
+	void PrintRepeats();
 };
 
 template <typename T>
@@ -53,34 +56,56 @@ bool LinkedList<T>::IsEmpty() {
 }
 
 template <typename T>
+int LinkedList<T>::VerifyRepeat(T content) {
+	int cont_repeat = 0;
+
+	struct node<T> * newNode = new struct node<T>;
+	newNode->next = head->next;
+
+	for(int i = 0; i < Length(); i++){	
+		newNode = newNode->next;		
+		if(GetElement(i) == content){									
+			cont_repeat++;		
+			newNode->cont_repeat += cont_repeat;						
+		}			
+	}
+
+	return cont_repeat;
+}
+
+template <typename T>
 void LinkedList<T>::PushFront(T content) {
 	struct node<T> * newNode = new struct node<T>;
-	newNode->content = content;
-	newNode->next = head->next;
-	head->next = newNode;
-	tail->next = newNode;
+	if(VerifyRepeat(content) == 0){
+		newNode->content = content;
+		newNode->next = head->next;	
+		head->next = newNode;
 
-	if(IsEmpty())
-		tail->next = newNode;
+		if(IsEmpty())
+			tail->next = newNode;
 
-	length++;
+		length++;
+	}
 }
 
 template <typename T>
 void LinkedList<T>::PushBack(T content) {
 	struct node<T> * newNode = new struct node<T>;
-	newNode->content = content;
-	newNode->next = nullptr;
+	if(VerifyRepeat(content) == 0){
+		newNode->content = content;
+		newNode->cont_repeat = VerifyRepeat(content);
+		newNode->next = nullptr;
 
-	if(!IsEmpty())
-		tail->next->next = newNode;
-	
-	tail->next = newNode;
+		if(!IsEmpty())
+			tail->next->next = newNode;
+		
+		tail->next = newNode;
 
-	if(IsEmpty())
-		head->next = newNode;
+		if(IsEmpty())
+			head->next = newNode;
 
-	length++;
+		length++;
+	}
 }
 
 template <typename T>
@@ -149,11 +174,27 @@ void LinkedList<T>::Print() {
 	struct node<T> * aux = head->next;
 
 	while(aux != nullptr) {
-		std::cout << aux->content << "\t";
+		std::cout << "(" << aux->content << ")" << " ";
 		aux = aux->next;
 	}
 
 	std::cout << std::endl;
+}
+
+template <typename T>
+void LinkedList<T>::PrintRepeats(){
+	struct node<T> * aux = head->next;
+	LinkedList<T> list;
+	int last_aux = 0;
+	bool printed = false;
+
+	while(aux != nullptr) {				
+		if(aux->cont_repeat > 0){
+			std::cout << ">'" << aux->content << "' repete " << aux->cont_repeat << "x" << std::endl;
+			printed = true;
+		}
+		aux = aux->next;
+	}
 }
 
 #endif
